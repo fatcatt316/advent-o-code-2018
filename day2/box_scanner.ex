@@ -10,24 +10,24 @@ defmodule BoxScanner do
   end
 
   defp calculate_checksum([box_id | remaining_box_ids], counts) do
-    result = figure_count_maps(box_id)
+    result = character_counts(box_id)
 
-    counts = if Enum.member?(Map.values(result), 2) do
-      Map.update(counts, "two_count", counts["two_count"], &(&1 + 1))
-    else
-      counts
-    end
+    counts = counts
+    |> update_counts(result, "two_count", 2)
+    |> update_counts(result, "three_count", 3)
 
-    counts = if Enum.member?(Map.values(result), 3) do
-      Map.update(counts, "three_count", counts["three_count"], &(&1 + 1))
-    else
-      counts
-    end
     calculate_checksum(remaining_box_ids, counts)
   end
 
-  # Return e.g., {"2_count": 3, "3_count": 2}
-  defp figure_count_maps(box_id) do
+  defp update_counts(counts, result, key, digit) do
+    if Enum.member?(Map.values(result), digit) do
+      Map.update(counts, key, counts[key], &(&1 + 1))
+    else
+      counts
+    end
+  end
+
+  defp character_counts(box_id) do
     Enum.reduce String.graphemes(box_id), %{}, fn(letter, acc) ->
       Map.update(acc, letter, 1, &(&1 + 1))
     end
