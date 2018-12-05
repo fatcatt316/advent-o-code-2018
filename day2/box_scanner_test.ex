@@ -13,4 +13,12 @@ defmodule BoxScannerTest do
   test "for_real_input checksum" do
     assert BoxScanner.checksum("for_real_input.txt") == 4920
   end
+
+  test "part_two_test_input common_letters" do
+    assert BoxScanner.common_letters("part_two_test_input.txt") == "fgij"
+  end
+
+  test "for_real_input common_letters" do
+    assert BoxScanner.common_letters("for_real_input.txt") == "fonbwmjquwtapeyzikghtvdxl"
+  end
 end

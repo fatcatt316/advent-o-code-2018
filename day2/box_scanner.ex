@@ -1,4 +1,60 @@
 defmodule BoxScanner do
+  def common_letters(file_path) do
+    box_ids = File.read!(file_path)
+    |> String.split("\n")
+
+    box_id = List.first(box_ids)
+    other_box_ids = List.delete_at(box_ids, 0)
+
+    find_almost_equal_box_ids(
+      box_id,
+      other_box_ids,
+      other_box_ids
+    )
+  end
+
+  defp find_almost_equal_box_ids(_current_box_id, [], unchecked_box_ids) do
+    box_id = List.first(unchecked_box_ids)
+    other_box_ids = List.delete_at(unchecked_box_ids, 0)
+
+    find_almost_equal_box_ids(box_id, other_box_ids, other_box_ids)
+  end
+
+  defp find_almost_equal_box_ids(current_box_id, other_box_ids, unchecked_box_ids) do
+    diff_idxs = different_indices(
+      String.graphemes(current_box_id),
+      String.graphemes(Enum.at(other_box_ids, 0)),
+      [],
+      0
+    )
+
+    if Enum.count(diff_idxs) == 1 do
+      String.graphemes(current_box_id)
+      |> List.delete_at(Enum.at(diff_idxs, 0))
+      |> Enum.join
+    else
+      find_almost_equal_box_ids(
+        current_box_id,
+        List.delete_at(other_box_ids, 0),
+        unchecked_box_ids
+      )
+    end
+  end
+
+  defp different_indices([], [], indices, _idx) do
+    indices
+  end
+
+  defp different_indices([id1_char | id1_chars], [id2_char | id2_chars], indices, idx) when id1_char == id2_char do
+    different_indices(id1_chars, id2_chars, indices, idx + 1)
+  end
+
+  defp different_indices([id1_char | id1_chars], [id2_char | id2_chars], indices, idx) when id1_char != id2_char do
+    different_indices(id1_chars, id2_chars, indices ++ [idx], idx + 1)
+  end
+
+  ######## PART 1 BELOW ########
+
   def checksum(file_path) do
     File.read!(file_path)
     |> String.split("\n")
