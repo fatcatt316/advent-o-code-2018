@@ -6,6 +6,41 @@ defmodule PolymerThingy do
     |> Enum.count
   end
 
+  def removed_length(polymer, removal_letter) do
+    polymer
+    |> String.split(~r/#{removal_letter}/i, trim: true)
+    |> Enum.join
+    |> final_length
+  end
+
+  def shortest_polymer_length(polymer) do
+    cycle_removal_letters(
+      polymer,
+      letters_to_try(polymer),
+      String.length(polymer)
+    )
+  end
+
+  def cycle_removal_letters(_, [], shortest_length) do
+    shortest_length
+  end
+
+  def cycle_removal_letters(polymer, [removal_letter | remaining_letters], shortest_length) do
+    cycle_removal_letters(
+      polymer,
+      remaining_letters,
+      min(shortest_length, removed_length(polymer, removal_letter))
+    )
+  end
+
+  defp letters_to_try(polymer) do
+    polymer
+    |> String.downcase
+    |> String.graphemes
+    |> MapSet.new
+    |> MapSet.to_list
+  end
+
   defp reduce_polymer(units, idx) do
     cond do
       idx+1 >= Enum.count(units) ->

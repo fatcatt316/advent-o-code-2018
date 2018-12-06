@@ -6,28 +6,53 @@ ExUnit.configure exclude: :pending, trace: true
 defmodule PolymerThingyTest do
   use ExUnit.Case
 
-  # test "aA" do
-  #   assert PolymerThingy.final_length("aA") == 0
-  # end
+  test "aA" do
+    assert PolymerThingy.final_length("aA") == 0
+  end
 
-  # test "abBA" do
-  #   assert PolymerThingy.final_length("abBA") == 0
-  # end
+  test "abBA" do
+    assert PolymerThingy.final_length("abBA") == 0
+  end
 
-  # test "abAB" do
-  #   assert PolymerThingy.final_length("abAB") == 4
-  # end
+  test "abAB" do
+    assert PolymerThingy.final_length("abAB") == 4
+  end
 
-  # test "aabAAB" do
-  #   assert PolymerThingy.final_length("aabAAB") == 6
-  # end
+  test "aabAAB" do
+    assert PolymerThingy.final_length("aabAAB") == 6
+  end
 
-  # test "dabAcCaCBAcCcaDA" do
-  #   assert PolymerThingy.final_length("dabAcCaCBAcCcaDA") == 10
-  # end
+  test "dabAcCaCBAcCcaDA" do
+    assert PolymerThingy.final_length("dabAcCaCBAcCcaDA") == 10
+  end
 
   test "super long input" do
     assert PolymerThingy.final_length(super_long_input) == 10
+  end
+
+  ##### Part 2
+  test "dabAcCaCBAcCcaDA remove A" do
+    assert PolymerThingy.removed_length("dabAcCaCBAcCcaDA", "A") == 6
+  end
+
+  test "dabAcCaCBAcCcaDA remove B" do
+    assert PolymerThingy.removed_length("dabAcCaCBAcCcaDA", "B") == 8
+  end
+
+  test "dabAcCaCBAcCcaDA remove C" do
+    assert PolymerThingy.removed_length("dabAcCaCBAcCcaDA", "C") == 4
+  end
+
+  test "dabAcCaCBAcCcaDA remove D" do
+    assert PolymerThingy.removed_length("dabAcCaCBAcCcaDA", "D") == 6
+  end
+
+  test "shortest polymer" do
+    assert PolymerThingy.shortest_polymer_length("dabAcCaCBAcCcaDA") == 4
+  end
+
+  test "shortest polymer with crazy input" do
+    assert PolymerThingy.shortest_polymer_length(super_long_input) == 4504
   end
 
   defp super_long_input do
